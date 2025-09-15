@@ -1,0 +1,77 @@
+# Vercel ignore patterns
+# Exclude files not needed for deployment
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+dev.sh
+setup.sh
+
+# Documentation (keep README.md)
+CONTRIBUTING.md
+
+# Testing
+tests/
+pytest.ini
+.coverage
+htmlcov/
+
+# Local development
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Database files (not needed for serverless)
+*.db
+*.sqlite
+*.sqlite3
+research_platform.db
+
+# Build files
+build/
+dist/
+*.egg-info/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (not needed for Vercel)
+Dockerfile
+docker-compose.yml
+
+# Git files
+.git/
+.gitignore
+
+# Large directories
+research_documents/archives/
+research_documents/comprehensive_research/
+research_documents/custom_research/
+research_documents/financial_analysis/
+research_documents/idea_validation/
+research_documents/market_research/
+
+# Keep metadata for structure
+!research_documents/metadata/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+.tmp
