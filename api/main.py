@@ -24,14 +24,24 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 openai_client = None
 session_storage = {}
 
-# Initialize OpenAI client if API key is available
-try:
-    from openai import OpenAI
-    api_key = os.getenv('OPENAI_API_KEY')
-    if api_key:
-        openai_client = OpenAI(api_key=api_key)
-except ImportError:
-    pass  # OpenAI library not available
+def get_openai_client():
+    """Lazy initialization of OpenAI client to avoid startup crashes"""
+    global openai_client
+    if openai_client is None:
+        try:
+            from openai import OpenAI
+            api_key = os.getenv('OPENAI_API_KEY')
+            if api_key:
+                # Initialize with minimal configuration for Vercel compatibility
+                openai_client = OpenAI(
+                    api_key=api_key,
+                    timeout=30.0,
+                    max_retries=2
+                )
+        except Exception as e:
+            print(f"Failed to initialize OpenAI client: {e}")
+            openai_client = False  # Mark as failed to avoid retrying
+    return openai_client if openai_client is not False else None
 
 # Try to import services, fallback to simplified versions
 try:
@@ -662,10 +672,11 @@ async def home():
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
+    client = get_openai_client()
     return {
         "status": "healthy",
         "platform": "vercel-serverless",
-        "openai_available": openai_client is not None,
+        "openai_available": client is not None,
         "timestamp": datetime.now().isoformat()
     }
 
@@ -692,7 +703,8 @@ async def get_models():
 @app.post("/api/research")
 async def conduct_research(request: ResearchRequest):
     """Conduct research using OpenAI"""
-    if not openai_client:
+    client = get_openai_client()
+    if not client:
         return {
             "task_id": str(uuid.uuid4()),
             "status": "error",
@@ -716,7 +728,7 @@ async def conduct_research(request: ResearchRequest):
             prompt = f"Conduct comprehensive research on: {request.query}. Provide detailed analysis with insights, data, and actionable recommendations."
 
         # Call OpenAI API
-        response = openai_client.chat.completions.create(
+        response = client.chat.completions.create(
             model=request.model,
             messages=[
                 {"role": "system", "content": "You are an expert research analyst. Provide comprehensive, well-structured analysis with actionable insights. Use clear headings and bullet points for readability."},
