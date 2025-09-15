@@ -3,7 +3,10 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb"
+      }
     }
   ],
   "routes": [
@@ -17,12 +20,8 @@
     }
   ],
   "env": {
-    "OPENAI_API_KEY": "@openai_api_key"
-  },
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 300
-    }
+    "OPENAI_API_KEY": "@openai_api_key",
+    "PYTHONPATH": "/var/task"
   },
   "headers": [
     {
