@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  ai-research-platform:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-research-platform
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=sqlite:///app/data/research_platform.db
+      - DEBUG=false
+    volumes:
+      - ./data:/app/data
+      - ./research_documents:/app/research_documents
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - research-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-research-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - research-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: ai-research-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - ai-research-platform
+    restart: unless-stopped
+    networks:
+      - research-network
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  research-network:
+    driver: bridge

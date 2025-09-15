@@ -36,7 +36,7 @@ A comprehensive FastAPI-based research platform that leverages OpenAI's advanced
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/ai-research-platform.git
+   git clone https://github.com/MajorAbdullah/ai-research-platform.git
    cd ai-research-platform
    ```
 
@@ -64,9 +64,20 @@ A comprehensive FastAPI-based research platform that leverages OpenAI's advanced
 
 ## 🚀 Usage
 
-### Starting the Server
+### Quick Start
 
 ```bash
+# Setup (first time only)
+./setup.sh
+
+# Run the application
+./dev.sh run
+```
+
+### Manual Start
+
+```bash
+source .venv/bin/activate
 python app.py
 ```
 
@@ -223,20 +234,32 @@ Models can be configured in `services/research_client.py` with custom parameters
 
 ## 🚦 Development
 
-### Running in Development Mode
+### Development Commands
 ```bash
-# Enable debug mode
-export DEBUG=true
-python app.py
+./dev.sh setup    # Initial setup
+./dev.sh run      # Start development server
+./dev.sh test     # Run tests
+./dev.sh lint     # Check code quality
+./dev.sh format   # Format code
+./dev.sh clean    # Clean up files
+./dev.sh docker   # Run with Docker
 ```
 
 ### Running Tests
 ```bash
-# Install test dependencies
-pip install pytest pytest-asyncio
+./dev.sh test
+# or manually:
+source .venv/bin/activate
+pytest tests/ -v --cov=.
+```
 
-# Run tests
-pytest
+### Docker Development
+```bash
+# Using docker-compose
+docker-compose up --build
+
+# Using development script
+./dev.sh docker
 ```
 
 ### Code Structure
@@ -262,7 +285,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/yourusername/ai-research-platform/issues) page
+1. Check the [Issues](https://github.com/MajorAbdullah/ai-research-platform/issues) page
 2. Create a new issue with detailed information
 3. Contact the maintainers
 
