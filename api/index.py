@@ -304,7 +304,14 @@ async def start_research(request: ResearchRequest):
         
         # Store in external storage if available
         if storage_service:
-            await storage_service.save_result(task_id, formatted_result)
+            try:
+                if hasattr(storage_service, 'save_result'):
+                    if asyncio.iscoroutinefunction(storage_service.save_result):
+                        await storage_service.save_result(task_id, formatted_result)
+                    else:
+                        storage_service.save_result(task_id, formatted_result)
+            except Exception as storage_error:
+                print(f"Storage error: {storage_error}")
         
         return formatted_result
         
@@ -324,9 +331,16 @@ async def start_research(request: ResearchRequest):
 async def get_research_status(task_id: str):
     """Get research status - for serverless, results are immediate"""
     if storage_service:
-        result = await storage_service.get_result(task_id)
-        if result:
-            return result
+        try:
+            if hasattr(storage_service, 'get_result'):
+                if asyncio.iscoroutinefunction(storage_service.get_result):
+                    result = await storage_service.get_result(task_id)
+                else:
+                    result = storage_service.get_result(task_id)
+                if result:
+                    return result
+        except Exception as storage_error:
+            print(f"Storage retrieval error: {storage_error}")
     
     raise HTTPException(status_code=404, detail="Task not found")
 
@@ -334,14 +348,20 @@ async def get_research_status(task_id: str):
 async def get_all_results():
     """Get all research results"""
     if storage_service:
-        return await storage_service.get_all_results()
+        try:
+            if hasattr(storage_service, 'get_all_results'):
+                if asyncio.iscoroutinefunction(storage_service.get_all_results):
+                    return await storage_service.get_all_results()
+                else:
+                    return storage_service.get_all_results()
+        except Exception as storage_error:
+            print(f"Storage get all error: {storage_error}")
     
     return []
 
-# Vercel serverless function handler
-def handler(request):
-    """Main handler for Vercel serverless deployment"""
-    return app
+# Export the FastAPI app for Vercel
+# Vercel expects the ASGI application to be available at module level
+# No need for custom handler function
 
 # For local development
 if __name__ == "__main__":
