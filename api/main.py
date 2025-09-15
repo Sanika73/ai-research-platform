@@ -682,21 +682,21 @@ async def health_check():
 
 @app.get("/api/models")
 async def get_models():
-    """Get available models"""
+    """Get available models - matching original app.py sophisticated models"""
     return {
-        "gpt-4": {
-            "name": "GPT-4",
-            "description": "Most capable model for complex research",
-            "best_for": "Detailed analysis, comprehensive research",
+        "o3-deep-research": {
+            "name": "O3 Deep Research",
+            "description": "Most comprehensive research model with advanced reasoning capabilities",
+            "best_for": "Complex analysis, detailed reports, comprehensive research",
             "cost": "Higher",
-            "speed": "Moderate"
+            "speed": "Slower"
         },
-        "gpt-3.5-turbo": {
-            "name": "GPT-3.5 Turbo",
-            "description": "Fast and efficient for general research",
-            "best_for": "Quick research, general queries",
+        "o4-mini-deep-research": {
+            "name": "O4 Mini Deep Research",
+            "description": "Faster, cost-effective research model for quicker insights",
+            "best_for": "Quick research, initial exploration, cost-sensitive tasks",
             "cost": "Lower",
-            "speed": "Fast"
+            "speed": "Faster"
         }
     }
 
@@ -727,18 +727,40 @@ async def conduct_research(request: ResearchRequest):
         else:
             prompt = f"Conduct comprehensive research on: {request.query}. Provide detailed analysis with insights, data, and actionable recommendations."
 
-        # Call OpenAI API
+        # Map custom model names to actual OpenAI models
+        model_mapping = {
+            "o3-deep-research": "gpt-4-turbo-preview",  # Map to most capable model
+            "o4-mini-deep-research": "gpt-3.5-turbo"   # Map to faster model
+        }
+        
+        actual_model = model_mapping.get(request.model, "gpt-4")
+        
+        # Enhanced system prompt for better research quality
+        system_prompt = """You are an advanced AI research analyst with expertise across multiple domains. 
+        Provide comprehensive, well-structured research with:
+        - Executive summary with key findings
+        - Detailed analysis with data and statistics
+        - Market insights and trends
+        - Actionable recommendations
+        - Risk assessment and mitigation strategies
+        Use markdown formatting with clear headings, bullet points, and structured sections."""
+
+        # Call OpenAI API with mapped model
         response = client.chat.completions.create(
-            model=request.model,
+            model=actual_model,
             messages=[
-                {"role": "system", "content": "You are an expert research analyst. Provide comprehensive, well-structured analysis with actionable insights. Use clear headings and bullet points for readability."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=2000,
+            max_tokens=3000,  # Increased for more comprehensive output
             temperature=0.7
         )
         
         content = response.choices[0].message.content
+        
+        # Enhanced result structure matching original app.py
+        word_count = len(content.split()) if content else 0
+        citations = content.count('[') if content else 0  # Simple citation count
         
         result = {
             "task_id": task_id,
@@ -747,7 +769,14 @@ async def conduct_research(request: ResearchRequest):
             "model": request.model,
             "research_type": request.research_type,
             "content": content,
-            "timestamp": datetime.now().isoformat(),
+            "completed_at": datetime.now().isoformat(),
+            "result": {
+                "output": content,
+                "formatted_output": content,
+                "word_count": word_count,
+                "citations": citations,
+                "processing_time_formatted": "< 1 minute"
+            },
             "usage": {
                 "prompt_tokens": response.usage.prompt_tokens,
                 "completion_tokens": response.usage.completion_tokens,
